@@ -75,7 +75,7 @@ const App: React.FC = () => {
     // Si la casilla ya tiene un valor o hay un ganador, no hace nada
     if (board[index] || winner) return;
 
-    // Copia del estado actual del tablero para evitar mutaciones directas
+    // Copia del estado actual del tablero para evitar mutaciones directas usando el spreat operator
     const newBoard = [...board];
     newBoard[index] = turn; // Asigna el turno actual ('X' o 'O') a la posición clickeada
     setBoard(newBoard); // Actualiza el estado del tablero con la nueva configuración
