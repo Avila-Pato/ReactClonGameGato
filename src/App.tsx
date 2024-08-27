@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
+import confetti from 'canvas-confetti';
 import './App.css';
+
 
 // Definimos los turnos posibles en el juego
 const TURNS = {
@@ -88,9 +90,38 @@ const App: React.FC = () => {
     const newWinner = checkWinner(newBoard);
     if (newWinner) {
       setWinner(newWinner); // Actualiza el estado del ganador si hay uno
-    }
-  };
+   
+   // Lanza el confetti solo si hay un ganador
+   confetti({
+    particleCount: 150,
+    spread: 160,
+    startVelocity: 30,
+    angle: -100,
+    origin: {
+      x: 1, // Confetti desde el lado derecho
+      y: 0,
+    },
+  });
 
+  confetti({
+    particleCount: 150,
+    spread: 160,
+    startVelocity: 30,
+    angle: -80,
+    origin: {
+      x: 0, // Confetti desde el lado izquierdo
+      y: 0,
+    },
+  });
+}
+};
+
+  // Función para reiniciar el juego
+  const resetGame = () => {
+    setBoard(Array(9).fill(null)); // Reinicia el tablero a valores nulos
+    setTurn(TURNS.X); // Reinicia el turno a 'X'
+    setWinner(null); //
+  }
   // Renderizado de la aplicación
   return (
     <main className='board'>
@@ -121,6 +152,9 @@ const App: React.FC = () => {
       </section>
       {/* Muestra un mensaje de ganador si hay un ganador */}
       {winner && <p>{winner} ganó la partida!</p>}
+
+      {/* Boton para reiniciar el juego */}
+      <button onClick={resetGame}>Reiniciar el juego</button>
     </main>
   );
 }
