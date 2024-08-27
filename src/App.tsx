@@ -151,10 +151,30 @@ const App: React.FC = () => {
         </Square>
       </section>
       {/* Muestra un mensaje de ganador si hay un ganador */}
-      {winner && <p>{winner} ganó la partida!</p>}
+      {winner !== null && (
+        <section className='winner'>
+          <div className='text'>
+            <h2>
+              {
+                winner === TURNS.X
+                  ? '¡Ganó el jugador X!'
+                  : '¡Ganó el jugador O!'
+              }
+            </h2>
 
-      {/* Boton para reiniciar el juego */}
-      <button onClick={resetGame}>Reiniciar el juego</button>
+            <header className='win'>
+              {winner && <Square isSelected={false} updateBoard={() => {}} index={-1}>{winner}</Square>}
+            </header>
+
+            <footer>
+               {/* Boton para reiniciar el juego */}
+              <button onClick={resetGame}>Reiniciar el juego</button>
+            </footer>
+          </div>
+        </section>
+      )}
+
+     
     </main>
   );
 }
