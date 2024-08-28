@@ -1,13 +1,7 @@
 import React, { useState } from 'react';
 import confetti from 'canvas-confetti';
 import './App.css';
-
-
-// Definimos los turnos posibles en el juego
-const TURNS = {
-  X: 'x', // Turno del jugador X
-  O: 'o'  // Turno del jugador O
-};
+import { TURNS, WINNER_COMBOS } from './interface/interface.td';
 
 // Definimos los tipos de los props que espera el componente Square
 interface SquareProps {
@@ -35,17 +29,6 @@ const Square = ({ children, isSelected, updateBoard, index }: SquareProps) => {
   );
 }
 
-// Combinaciones ganadoras en el juego
-const WINNER_COMBOS = [
-  [0, 1, 2], // Primera fila
-  [3, 4, 5], // Segunda fila
-  [6, 7, 8], // Tercera fila
-  [0, 3, 6], // Primera columna
-  [1, 4, 7], // Segunda columna
-  [2, 5, 8], // Tercera columna
-  [0, 4, 8], // Diagonal principal
-  [2, 4, 6]  // Diagonal secundaria
-];
 
 const App: React.FC = () => {
   // Estado del tablero, inicialmente un array de 9 posiciones con valores nulos
@@ -72,12 +55,17 @@ const App: React.FC = () => {
     return null; // Si no hay ganador, retorna null
   };
 
+  // Función para verificar si hay un empate cuando no hay ganador y el tablero está lleno
+  const checkEndGame = (newBoard: Array<string | null>) => {
+    return newBoard.every((square) => square !== null);
+  };
+
   // Función para actualizar el tablero y los cambios de estado al hacer clic en las casillas
   const updateBoard = (index: number) => {
     // Si la casilla ya tiene un valor o hay un ganador, no hace nada
     if (board[index] || winner) return;
 
-    // Copia del estado actual del tablero para evitar mutaciones directas usando el spreat operator
+    // Copia del estado actual del tablero para evitar mutaciones directas usando el spread operator
     const newBoard = [...board];
     newBoard[index] = turn; // Asigna el turno actual ('X' o 'O') a la posición clickeada
     setBoard(newBoard); // Actualiza el estado del tablero con la nueva configuración
@@ -90,42 +78,45 @@ const App: React.FC = () => {
     const newWinner = checkWinner(newBoard);
     if (newWinner) {
       setWinner(newWinner); // Actualiza el estado del ganador si hay uno
-   
-   // Lanza el confetti solo si hay un ganador
-   confetti({
-    particleCount: 150,
-    spread: 160,
-    startVelocity: 30,
-    angle: -100,
-    origin: {
-      x: 1, // Confetti desde el lado derecho
-      y: 0,
-    },
-  });
+      // Lanza el confetti solo si hay un ganador
+      confetti({
+        particleCount: 150,
+        spread: 160,
+        startVelocity: 30,
+        angle: -100,
+        origin: {
+          x: 1, // Confetti desde el lado derecho
+          y: 0,
+        },
+      });
 
-  confetti({
-    particleCount: 150,
-    spread: 160,
-    startVelocity: 30,
-    angle: -80,
-    origin: {
-      x: 0, // Confetti desde el lado izquierdo
-      y: 0,
-    },
-  });
-}
-};
+      confetti({
+        particleCount: 150,
+        spread: 160,
+        startVelocity: 30,
+        angle: -80,
+        origin: {
+          x: 0, // Confetti desde el lado izquierdo
+          y: 0,
+        },
+      });
+    } else if (checkEndGame(newBoard)) {
+      setWinner('Empate'); // Si no hay ganador, pero el juego ha terminado, se declara empate
+    }
+  };
 
   // Función para reiniciar el juego
   const resetGame = () => {
     setBoard(Array(9).fill(null)); // Reinicia el tablero a valores nulos
     setTurn(TURNS.X); // Reinicia el turno a 'X'
-    setWinner(null); //
-  }
+    setWinner(null); // Reinicia el estado del ganador
+  };
+
   // Renderizado de la aplicación
   return (
     <main className='board'>
       <h1>Juego del Gato</h1>
+      <button onClick={resetGame}>Reiniciar juego</button>
       <section className='game'>
         {/* Mapea cada posición del tablero para renderizar un componente Square */}
         {board.map((value, index) => {
@@ -156,16 +147,17 @@ const App: React.FC = () => {
           <div className='text'>
             <h2>
               {
-                winner === TURNS.X
-                  ? '¡Ganó el jugador X!'
-                  : '¡Ganó el jugador O!'
+                winner === 'Empate'
+                  ? '¡Es un empate!'
+                  : `¡Ganó el jugador ${winner}!`
               }
             </h2>
 
-            <header className='win'>
-              {winner && <Square isSelected={false} updateBoard={() => {}} index={-1}>{winner}</Square>}
+            <header className='win' >
+               
+              {winner && winner !== 'Empate' && <Square isSelected={false} updateBoard={() => {}} index={-1}>{winner}</Square>}
             </header>
-
+                
             <footer>
                {/* Boton para reiniciar el juego */}
               <button onClick={resetGame}>Reiniciar el juego</button>
@@ -173,9 +165,8 @@ const App: React.FC = () => {
           </div>
         </section>
       )}
-
-     
     </main>
   );
 }
+
 export default App;
