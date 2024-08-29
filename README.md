@@ -1,6 +1,6 @@
 # Juego del Gato (Tic-Tac-Toe) - React y TypeScript
 
-Este proyecto es una implementación del clásico juego del Gato (Tic-Tac-Toe) utilizando React y TypeScript. El objetivo del juego es lograr tres marcas consecutivas (en línea, columna o diagonal) antes que el oponente.
+Este proyecto es una implementación del clásico juego del Gato (Tic-Tac-Toe) utilizando React,TypeScript y un poco de Javascript. El objetivo del juego es lograr tres marcas consecutivas (en línea, columna o diagonal) antes que el oponente.
 
 ## Descripción del Proyecto
 
