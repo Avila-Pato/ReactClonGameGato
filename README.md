@@ -1,50 +1,27 @@
-# React + TypeScript + Vite
+# Juego del Gato (Tic-Tac-Toe) - React y TypeScript
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Este proyecto es una implementación del clásico juego del Gato (Tic-Tac-Toe) utilizando React y TypeScript. El objetivo del juego es lograr tres marcas consecutivas (en línea, columna o diagonal) antes que el oponente.
 
-Currently, two official plugins are available:
+## Descripción del Proyecto
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+El juego del Gato es un juego de dos jugadores en el que uno juega con "X" y el otro con "O". Los jugadores se turnan para marcar sus símbolos en una cuadrícula de 3x3. El primero en conseguir tres de sus marcas en una línea (horizontal, vertical o diagonal) gana el juego.
 
-## Expanding the ESLint configuration
+## Funcionalidades Principales
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+- **Juego interactivo en un tablero de 3x3**: Los jugadores pueden hacer clic en las casillas para colocar sus marcas ("X" o "O").
+- **Detección de ganador**: El juego detecta automáticamente cuando hay un ganador o un empate.
+- **Reinicio del juego**: Los jugadores pueden reiniciar el juego en cualquier momento.
+- **Animación de confetti**: Se muestra una animación de confetti cuando hay un ganador.
 
-- Configure the top-level `parserOptions` property like this:
+## Estructura del Código y Lógica del Juego
 
-```js
-export default tseslint.config({
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
-```
+### 1. Estado del Tablero (`board`)
 
-- Replace `tseslint.configs.recommended` to `tseslint.configs.recommendedTypeChecked` or `tseslint.configs.strictTypeChecked`
-- Optionally add `...tseslint.configs.stylisticTypeChecked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and update the config:
+El estado del tablero se representa mediante un array de 9 elementos, que corresponde a las 9 casillas del juego. Cada elemento del array puede ser:
 
-```js
-// eslint.config.js
-import react from 'eslint-plugin-react'
+- `"X"`: Marca del primer jugador.
+- `"O"`: Marca del segundo jugador.
+- `null`: Casilla vacía.
 
-export default tseslint.config({
-  // Set the react version
-  settings: { react: { version: '18.3' } },
-  plugins: {
-    // Add the react plugin
-    react,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended rules
-    ...react.configs.recommended.rules,
-    ...react.configs['jsx-runtime'].rules,
-  },
-})
-```
+```typescript
+const [board, setBoard] = useState<Array<string | null>>(Array(9).fill(null));
